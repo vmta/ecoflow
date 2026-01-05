@@ -1,0 +1,21 @@
+{
+  "domain": "ecoflow",
+  "name": "Ecoflow",
+  "codeowners": [
+    "@vmta"
+  ],
+  "config_flow": true,
+  "dependencies": [
+    "mqtt",
+    "integration"
+  ],
+  "documentation": "https://github.com/vmta/ecoflow",
+  "iot_class": "cloud_push",
+  "issue_tracker": "https://github.com/vmta/ecoflow/issues",
+  "requirements": [
+    "paho-mqtt>=2.1.0",
+    "protobuf==6.32.0",
+    "jsonpath-ng>=1.7.0"
+  ],
+  "version": "0.1.0-beta1"
+}
