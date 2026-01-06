@@ -12,7 +12,7 @@ from homeassistant.components.switch import SwitchEntity
 from homeassistant.helpers.entity import DeviceInfo, EntityCategory
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .. import ECOFLOW_DOMAIN
+from .. import EF_DOMAIN
 from ..api import EcoflowApiClient, Message
 from ..devices import (
     BaseDevice,
@@ -37,7 +37,7 @@ class EcoFlowAbstractEntity(CoordinatorEntity[EcoflowDeviceUpdateCoordinator]):
         if self._device.device_data.display_name:
             name = self._device.device_data.display_name
         return DeviceInfo(
-            identifiers={(ECOFLOW_DOMAIN, f"{self._type_prefix()}{self._device.device_data.sn}")},
+            identifiers={(EF_DOMAIN, f"{self._type_prefix()}{self._device.device_data.sn}")},
             manufacturer="EcoFlow",
             name=name,
             model=self._device.device_data.device_type,

@@ -1,6 +1,6 @@
 from custom_components.ecoflow.entities import EcoFlowDictEntity
 from typing import Any
-from custom_components.ecoflow import ECOFLOW_DOMAIN
+from custom_components.ecoflow import EF_DOMAIN
 from custom_components.ecoflow.api import EcoflowApiClient
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.config_entries import ConfigEntry
@@ -9,7 +9,7 @@ from homeassistant.components.binary_sensor import BinarySensorEntity
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback):
-    client: EcoflowApiClient = hass.data[ECOFLOW_DOMAIN][entry.entry_id]
+    client: EcoflowApiClient = hass.data[EF_DOMAIN][entry.entry_id]
     for sn, device in client.devices.items():
         sensors = device.binary_sensors(client)
         async_add_entities(sensors)

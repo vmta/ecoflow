@@ -4,7 +4,7 @@ from datetime import timedelta
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
-from . import ECOFLOW_DOMAIN
+from . import EF_DOMAIN
 from .api import EcoflowApiClient
 
 
@@ -18,7 +18,7 @@ def _to_serializable(x):
 
 
 async def async_get_config_entry_diagnostics(hass: HomeAssistant, entry: ConfigEntry):
-    client: EcoflowApiClient = hass.data[ECOFLOW_DOMAIN][entry.entry_id]
+    client: EcoflowApiClient = hass.data[EF_DOMAIN][entry.entry_id]
     values: dict[str, Any] = {"EcoFlow": []}
     for sn, device in client.devices.items():
         value = {

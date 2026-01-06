@@ -31,7 +31,7 @@ from . import (
     CONF_USERNAME,
     CONFIG_VERSION,
     DEFAULT_REFRESH_PERIOD_SEC,
-    ECOFLOW_DOMAIN,
+    EF_DOMAIN,
     OPTS_DIAGNOSTIC_MODE,
     OPTS_POWER_STEP,
     OPTS_REFRESH_PERIOD_SEC,
@@ -47,7 +47,7 @@ _LOGGER = logging.getLogger(__name__)
 API_SELECT_DEVICE_SCHEMA = vol.Schema({vol.Required(CONF_SELECT_DEVICE_KEY): str})
 
 
-class EcoflowConfigFlow(ConfigFlow, domain=ECOFLOW_DOMAIN):
+class EcoflowConfigFlow(ConfigFlow, domain=EF_DOMAIN):
     VERSION = CONFIG_VERSION
 
     def __init__(self) -> None:
@@ -141,9 +141,9 @@ class EcoflowConfigFlow(ConfigFlow, domain=ECOFLOW_DOMAIN):
         device_reg: DeviceRegistry = dr.async_get(self.hass)
 
         if CONF_ACCESS_KEY in self.config_entry.data:
-            identifiers = {(ECOFLOW_DOMAIN, f"api-{sn}")}
+            identifiers = {(EF_DOMAIN, f"api-{sn}")}
         else:
-            identifiers = {(ECOFLOW_DOMAIN, f"{sn}")}
+            identifiers = {(EF_DOMAIN, f"{sn}")}
 
         device = device_reg.async_get_device(identifiers=identifiers)
         _LOGGER.debug(".. getting device by %s: %s", str(identifiers), str(device))

@@ -40,7 +40,7 @@ from . import (
     ATTR_QUOTA_REQUESTS,
     ATTR_STATUS_DATA_LAST_UPDATE,
     ATTR_STATUS_SN,
-    ECOFLOW_DOMAIN,
+    EF_DOMAIN,
 )
 from .api import EcoflowApiClient
 from .devices import BaseDevice, const
@@ -53,7 +53,7 @@ _LOGGER = logging.getLogger(__name__)
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback):
-    client: EcoflowApiClient = hass.data[ECOFLOW_DOMAIN][entry.entry_id]
+    client: EcoflowApiClient = hass.data[EF_DOMAIN][entry.entry_id]
     for sn, device in client.devices.items():
         sensors = device.sensors(client)
         # Add regular sensors

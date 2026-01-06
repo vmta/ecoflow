@@ -13,7 +13,7 @@ from .device_data import DeviceData, DeviceOptions
 
 _LOGGER = logging.getLogger(__name__)
 
-ECOFLOW_DOMAIN = "ecoflow"
+EF_DOMAIN = "ecoflow"
 CONFIG_VERSION = 9
 
 _PLATFORMS = {
@@ -152,8 +152,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
 
     _LOGGER.info("Setup entry %s (data = %s)", str(entry), str(entry.data))
     api_client: EcoflowApiClient
-    if ECOFLOW_DOMAIN not in hass.data:
-        hass.data[ECOFLOW_DOMAIN] = {}
+    if EF_DOMAIN not in hass.data:
+        hass.data[EF_DOMAIN] = {}
     if CONF_USERNAME in entry.data and CONF_PASSWORD in entry.data:
         from .api.private_api import EcoflowPrivateApiClient
 
@@ -190,7 +190,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         device.configure(hass)
 
     await hass.async_add_executor_job(api_client.start)
-    hass.data[ECOFLOW_DOMAIN][entry.entry_id] = api_client
+    hass.data[EF_DOMAIN][entry.entry_id] = api_client
 
     # Must load all device data before configuring devices because the data
     # is used for entity setup.
@@ -208,7 +208,7 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry):
     if not await hass.config_entries.async_unload_platforms(entry, _PLATFORMS):
         return False
 
-    client = hass.data[ECOFLOW_DOMAIN].pop(entry.entry_id)
+    client = hass.data[EF_DOMAIN].pop(entry.entry_id)
     client.stop()
     return True
 

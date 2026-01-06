@@ -28,7 +28,7 @@ from custom_components.ecoflow.api import EcoflowApiClient
 from custom_components.ecoflow.devices import BaseInternalDevice, const
 from custom_components.ecoflow.devices.data_holder import PreparedData
 from custom_components.ecoflow.devices.internal.proto import (
-    ef_dp3_iobroker_pb2 as dp3,
+    ef_d3mp_iobroker_pb2 as d3mp,
 )
 from custom_components.ecoflow.number import (
     ChargingPowerEntity,
@@ -400,11 +400,11 @@ class Delta3MaxPlus(BaseInternalDevice):
 
             # Try to decode as HeaderMessage
             try:
-                header_msg = dp3.DP3HeaderMessage()
+                header_msg = d3mp.DP3HeaderMessage()
                 header_msg.ParseFromString(raw_data)
             except AttributeError as e:
                 _LOGGER.error(f"HeaderMessage class not found in pb2 module: {e}")
-                _LOGGER.debug(f"Available classes in pb2: {[attr for attr in dir(dp3) if not attr.startswith('_')]}")
+                _LOGGER.debug(f"Available classes in pb2: {[attr for attr in dir(d3mp) if not attr.startswith('_')]}")
                 return None
             except Exception as e:
                 _LOGGER.error(f"Failed to parse HeaderMessage: {e}")
@@ -489,20 +489,20 @@ class Delta3MaxPlus(BaseInternalDevice):
 
             if cmd_func == 254 and cmd_id == 21:
                 # DisplayPropertyUpload
-                msg_display_upload = dp3.DP3DisplayPropertyUpload()
+                msg_display_upload = d3mp.DP3DisplayPropertyUpload()
                 msg_display_upload.ParseFromString(pdata)
                 return self._protobuf_to_dict(msg_display_upload)
 
             elif cmd_func == 32 and cmd_id == 2:
                 # cmdFunc32_cmdId2_Report (CMSHeartBeatReport)
-                msg_report = dp3.DP3CMSHeartBeatReport()
+                msg_report = d3mp.DP3CMSHeartBeatReport()
                 msg_report.ParseFromString(pdata)
                 return self._protobuf_to_dict(msg_report)
 
             elif cmd_func == 254 and cmd_id == 22:
                 # RuntimePropertyUpload - frequently updated runtime properties
                 try:
-                    msg_runtime_upload = dp3.DP3RuntimePropertyUpload()
+                    msg_runtime_upload = d3mp.DP3RuntimePropertyUpload()
                     msg_runtime_upload.ParseFromString(pdata)
                     return self._protobuf_to_dict(msg_runtime_upload)
                 except AttributeError:
@@ -530,7 +530,7 @@ class Delta3MaxPlus(BaseInternalDevice):
             elif cmd_func == 254 and cmd_id == 23:
                 # cmdFunc254_cmdId23_Report - report with timestamp
                 try:
-                    msg_display_report = dp3.DP3DisplayPropertyReport()
+                    msg_display_report = d3mp.DP3DisplayPropertyReport()
                     msg_display_report.ParseFromString(pdata)
                     return self._protobuf_to_dict(msg_display_report)
                 except AttributeError:
@@ -561,7 +561,7 @@ class Delta3MaxPlus(BaseInternalDevice):
             elif self._is_bms_heartbeat(cmd_func, cmd_id):
                 # BMSHeartBeatReport - contains cycles, input_watts, output_watts, accu_chg_energy, accu_dsg_energy
                 try:
-                    msg_bms_heartbeat = dp3.DP3BMSHeartBeatReport()
+                    msg_bms_heartbeat = d3mp.DP3BMSHeartBeatReport()
                     msg_bms_heartbeat.ParseFromString(pdata)
                     _LOGGER.info(f"Successfully decoded BMSHeartBeatReport: cmdFunc={cmd_func}, cmdId={cmd_id}")
                     return self._protobuf_to_dict(msg_bms_heartbeat)
@@ -574,7 +574,7 @@ class Delta3MaxPlus(BaseInternalDevice):
 
             # Try to decode as BMSHeartBeatReport since that's a common case
             try:
-                msg_bms_heartbeat = dp3.DP3BMSHeartBeatReport()
+                msg_bms_heartbeat = d3mp.DP3BMSHeartBeatReport()
                 msg_bms_heartbeat.ParseFromString(pdata)
                 result = self._protobuf_to_dict(msg_bms_heartbeat)
                 # Check if we got meaningful data (cycles or energy fields)
